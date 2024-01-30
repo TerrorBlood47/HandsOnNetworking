@@ -1,3 +1,6 @@
+
+![Chat App](chat_app.jpg)
+
 # Simple Java Client-Server Application
 
 This repository contains a simple Java client-server application that allows communication between a client and a server over a network.
