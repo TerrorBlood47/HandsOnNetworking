@@ -1,5 +1,6 @@
 import java.io.*;
 import java.net.Socket;
+import java.util.Random;
 import java.util.Scanner;
 
 public class client {
@@ -33,6 +34,12 @@ public class client {
 
                 while(!validResponse) {
 
+                    if(sendError()){
+                        choice = 4;
+                    }else{
+                        choice = 2;
+                    }
+
                     switch (choice) {
                         case 1:
                             System.out.print("Enter the withdrawal amount: $");
@@ -55,6 +62,10 @@ public class client {
                             System.out.println("Exiting the bank application. Goodbye!");
                             return;
 
+                        case 4:
+                            out.writeObject("Error");
+                            break;
+
                         default:
                             System.out.println("Invalid choice. Please enter a valid option.");
                             continue;
@@ -63,7 +74,7 @@ public class client {
                     String response = (String) in.readObject();
 
                     if(response.equals("Error")){
-//                        System.out.println(response);
+
                     }else{
                         break;
                     }
@@ -71,11 +82,16 @@ public class client {
 
                 long endTime = System.nanoTime(); // Capture end time
                 long elapsedTime = endTime - startTime; // Calculate elapsed time
-//                System.out.println("Time between request and reply: " + elapsedTime + " nano seconds");
-                System.out.println(elapsedTime);
+                System.out.println("Time between request and reply: " + elapsedTime + " nano seconds");
             }
         } catch (IOException | ClassNotFoundException | InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    private static boolean sendError(){
+        Random random = new Random();
+        int randomNumber = random.nextInt(100);
+        return randomNumber < 90;
     }
 }

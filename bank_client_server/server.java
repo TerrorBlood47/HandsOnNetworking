@@ -1,6 +1,7 @@
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Objects;
 import java.util.Random;
 
 public class server {
@@ -23,6 +24,11 @@ public class server {
             while (true) {
 
                 String action = (String) in.readObject();
+
+                if(Objects.equals(action, "Error")){
+                    out.writeObject("Error");
+                    continue;
+                }
 
                 if (shouldSimulateError()) {
                     out.writeObject("Error");
@@ -49,6 +55,6 @@ public class server {
     private static boolean shouldSimulateError() {
         Random random = new Random();
         int randomNumber = random.nextInt(100);
-        return randomNumber < 90;
+        return false;
     }
 }
