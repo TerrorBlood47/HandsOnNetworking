@@ -24,9 +24,9 @@ public class server {
             while (true) {
 
                 String action = (String) in.readObject();
+                String reply;
 
                 if(Objects.equals(action, "Error")){
-                    out.writeObject("Error");
                     continue;
                 }
 

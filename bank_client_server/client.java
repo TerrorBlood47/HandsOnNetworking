@@ -17,28 +17,20 @@ public class client {
 
                 Thread.sleep(300);
 
-//                System.out.println("\nChoose an action:");
-//                System.out.println("1. Withdraw");
-//                System.out.println("2. Check Balance");
-//                System.out.println("3. Exit");
-//                System.out.print("Enter your choice: ");
+                System.out.println("\nChoose an action:");
+                System.out.println("1. Withdraw");
+                System.out.println("2. Check Balance");
+                System.out.println("3. Exit");
+                System.out.print("Enter your choice: ");
 
-//                int choice = scanner.nextInt();
-//                scanner.nextLine(); // consume the newline character
-
-                int choice = 2;
+                int choice = scanner.nextInt();
+                scanner.nextLine(); // consume the newline character
 
                 long startTime = System.nanoTime(); // Capture start time
 
                 boolean validResponse = false;
 
                 while(!validResponse) {
-
-                    if(sendError()){
-                        choice = 4;
-                    }else{
-                        choice = 2;
-                    }
 
                     switch (choice) {
                         case 1:
@@ -72,6 +64,7 @@ public class client {
                     }
 
                     String response = (String) in.readObject();
+                    System.out.println(response);
 
                     if(response.equals("Error")){
 
@@ -92,6 +85,6 @@ public class client {
     private static boolean sendError(){
         Random random = new Random();
         int randomNumber = random.nextInt(100);
-        return randomNumber < 90;
+        return randomNumber < 0;
     }
 }
