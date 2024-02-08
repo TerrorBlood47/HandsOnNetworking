@@ -8,7 +8,7 @@ import java.net.Socket;
 public class Server {
 	
 	public static final int PORT = 7500;
-	public static final String FILE_PATH ="C:\\Users\\azmai\\IdeaProjects\\DemoFileTransferMultiClient\\src\\serverstorage" ;
+	public static final String FILE_PATH ="./MultiChatFileDownloader/src/serverstorage" ;
 	
 	public static void main( String[] args ) throws IOException {
 		

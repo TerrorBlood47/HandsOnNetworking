@@ -9,7 +9,7 @@ public class httpServer {
     
     public static final int PORT = 7500;
     public static final String
-    FILE_PATH ="C:\\Users\\azmai\\OneDrive\\Desktop\\HandsOnNetworking\\LabProjects\\Lab 2\\HTTP_Server_Client\\src\\ServerStorage";
+    FILE_PATH ="./HTTP_Server_Client/src/ServerStorage";
     
     public static void main( String[] args ) throws IOException {
         

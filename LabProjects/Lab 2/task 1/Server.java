@@ -3,7 +3,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class Server {
-    public static final String FILES_PATH = "./serverfiles/";
+    public static final String FILES_PATH = "./task 1/serverfiles/";
     private ServerSocket serverSocket;
     public static final int PORT = 3030;
 

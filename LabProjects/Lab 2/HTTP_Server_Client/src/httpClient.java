@@ -6,7 +6,7 @@ import java.util.Scanner;
 public class httpClient {
 	
 	private static String 
-	FILE_PATH = "C:\\Users\\azmai\\OneDrive\\Desktop\\HandsOnNetworking\\LabProjects\\Lab 2\\HTTP_Server_Client\\src\\multipleClientsStorage";
+	FILE_PATH = "./HTTP_Server_Client/src/multipleClientsStorage";
 	
 	public static DataInputStream dis = null;
 	public static DataOutputStream dos = null;
@@ -66,6 +66,8 @@ public class httpClient {
 				System.out.println(workingDirectory);
 				
 				String saveFilePath = workingDirectory
+						+File.separator
+						+"HTTP_Server_Client"
 						+File.separator
 						+"src"
 						+File.separator
@@ -131,7 +133,7 @@ public class httpClient {
 				String chosenFileName = scn.nextLine();
 				
 				String workingDirectory = System.getProperty("user.dir");
-				String filePath = workingDirectory + File.separator + "src" + File.separator + "multipleClientsStorage"
+				String filePath = workingDirectory + File.separator + "HTTP_Server_Client" + File.separator + "src" + File.separator + "multipleClientsStorage"
 						+ File.separator + chosenFileName;
 				
 				try{
