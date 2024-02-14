@@ -57,7 +57,7 @@ public class ClientHandler extends Thread {
 				//get file path
 				String workingDirectory = System.getProperty("user.dir");
 				
-				String filePath = workingDirectory + File.separator+"src"
+				String filePath = workingDirectory + File.separator + "HTTP_Server_Client" + File.separator+"src"
 						+File.separator +"ServerStorage"+File.separator + filename;
 				
 				try {
