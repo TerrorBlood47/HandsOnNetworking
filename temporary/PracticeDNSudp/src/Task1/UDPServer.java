@@ -47,8 +47,8 @@ public class UDPServer {
 		DatagramSocket serverSocket;
 		DatagramPacket receivedPacket;
 		
-		public static String rootIp = "10.33.3.13";
-		public static int rootPort = 3500;
+		public static String rootIp = "localhost";
+		public static int rootPort = 7000;
 		
 		String message = null;
 		
@@ -84,19 +84,19 @@ public class UDPServer {
 			System.out.println("hoise " + this.message);
 			
 			if (localStorage.containsKey(this.message)) {
-				System.out.println("paisiiiiiiiiiiiiiiiiiiiii........");
+				System.out.println("paisiiii........");
 				String IP = localStorage.get(this.message);
 				System.out.println(IP);
 				byte[] ip_data = IP.getBytes();
 				return  ip_data;
+			}else{
+				System.out.println("painai");
+				DatagramPacket get_ip_data_in_packet = SendToRootServer();
+				String s = new String(get_ip_data_in_packet.getData(), 0, get_ip_data_in_packet.getLength());
+				//localStorage.put(this.message,s);
+				return s.getBytes();
 			}
-			
-			DatagramPacket get_ip_data_in_packet = SendToRootServer();
-			
-			String s = new String(get_ip_data_in_packet.getData(), 0, get_ip_data_in_packet.getLength());
-			
-			return s.getBytes();
-			
+
 		}
 		
 		private DatagramPacket SendToRootServer( ) throws IOException {

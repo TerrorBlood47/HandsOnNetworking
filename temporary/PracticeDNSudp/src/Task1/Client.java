@@ -14,7 +14,7 @@ public class Client {
 		// carrying the data.
 		DatagramSocket ds = new DatagramSocket();
 		
-		InetAddress ip = InetAddress.getByName("10.42.0.63");
+		InetAddress ip = InetAddress.getByName("localhost");
 		byte buf[] = null;
 		
 		// loop while user not enters "bye"
