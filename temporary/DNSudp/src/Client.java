@@ -19,8 +19,9 @@ public class Client {
 		
 		// loop while user not enters "bye"
 		while (true) {
-			System.out.println("ENter");
+			System.out.println("Enter");
 			String inp = sc.nextLine();
+			inp = buildDnsRequest(inp);
 			
 			// break the loop if user enters "bye"
 			if (inp.equals("bye"))
@@ -49,4 +50,42 @@ public class Client {
 			
 		}
 	}
+
+	private static String buildDnsRequest(String input) {
+
+		// Header
+		// Transaction ID: A unique identifier for the query
+		String transactionId = "1234";
+
+		// Flags: Placeholder flags for a standard query
+		String flags = "0100";
+
+		// Questions: Number of questions
+		String questions = "0001";
+
+		// Answer RRs: Number of answer resource records
+		String answerRrs = "0000";
+
+		// Query type: A (IPv4 address) record
+		String queryType = "0001";
+
+		// Query class: IN (Internet)
+		String queryClass = "0001";
+
+		String domainName = input;
+
+		// Construct the DNS query string
+		return transactionId + " " + flags + " " + questions + " " + answerRrs + " " + domainName + " " + queryType + " " + queryClass;
+	}
+
+	private static String extractDomainName(String dnsRequest) {
+		String[] parts = dnsRequest.split("\\s+");
+
+		if (parts.length > 4) {
+			return parts[4];
+		} else {
+			return null;
+		}
+	}
+
 }

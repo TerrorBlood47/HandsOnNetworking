@@ -29,6 +29,7 @@ public class recLocalISPServer {
 				//Thread.sleep(2000);
 				
 				String domainName = new String(receivePacket.getData(), 0, receivePacket.getLength());
+				domainName = extractDomainName(domainName);
 				InetAddress clientAddress = receivePacket.getAddress();
 				int clientPort = receivePacket.getPort();
 				
@@ -72,6 +73,16 @@ public class recLocalISPServer {
 			return message;
 			
 			
+		}
+	}
+
+	private static String extractDomainName(String dnsRequest) {
+		String[] parts = dnsRequest.split("\\s+");
+
+		if (parts.length > 4) {
+			return parts[4];
+		} else {
+			return null;
 		}
 	}
 }
