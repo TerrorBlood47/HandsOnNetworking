@@ -1,5 +1,3 @@
-
-
 import java.io.*;
 import java.nio.file.Files;
 import java.text.*;
@@ -87,7 +85,7 @@ class ClientHandler extends Thread
 		
 		//turning the file data into bits
 		//String filepath = System.getProperty("user.dir") + File.separator + "src" + File.separator + "a.txt";
-		File file = new File("C:\\Users\\azmai\\OneDrive\\Desktop\\HandsOnNetworking\\LabProjects\\Lab 5\\flow_control_lab\\src\\a.txt");
+		File file = new File("src/a.txt");
 		byte[] fileBytes = null;
 		
 		try {
