@@ -12,7 +12,7 @@ public class Client
 		try
 		{
 			Scanner scn = new Scanner(System.in);
-			Socket s = new Socket("localhost", 2500);
+			Socket s = new Socket("localhost", 25000);
 			
 			DataInputStream dis = new DataInputStream(s.getInputStream());
 			DataOutputStream dos = new DataOutputStream(s.getOutputStream());
@@ -51,21 +51,22 @@ public class Client
 						System.out.println("ack : " + cumulative_ack);
 						
 						if(packetHeader.getSequenceNumber() == cumulative_ack + 1){
-							cumulative_ack = packetHeader.getSequenceNumber() + 1;
+							cumulative_ack = packetHeader.getSequenceNumber() ;
 							System.out.println("ack in: " + cumulative_ack);
 						}
 						
-						if(cumulative_ack == packet_no){
+						if(cumulative_ack == packet_no-1){
+							System.out.println("completed");
 							break;
 						}
 					}
-					//recieveBytes[ i ] = dis.readByte();
+					
 					int flag = 0;
 					
-					if ( cumulative_ack >= packet_no ) {
+					if ( cumulative_ack == packet_no - 1 ) {
 						
 						oos.writeObject(new TCPPacket(s.getPort(), packetHeader.getSourcePort(), 0,
-								cumulative_ack+1, flag,window_size));
+								cumulative_ack + 1, flag,window_size));
 						
 						System.out.println("Closing this connection : " + s);
 						s.close();
@@ -73,12 +74,13 @@ public class Client
 						break;
 					}
 					
-					
-					if(cumulative_ack < new Random().nextInt(10)) {
+			
+					//if(cumulative_ack > new Random().nextInt(10)) {
+						System.out.println("sending acknowledgement");
 						oos.writeObject(new TCPPacket(s.getPort(), packetHeader.getSourcePort(), 0,
 								cumulative_ack + 1, flag, window_size));
 						
-					}
+					//}
 					
 				}
 			}catch (EOFException e){
@@ -90,10 +92,15 @@ public class Client
 			int i = 0;
 			
 			try {
-				for ( Map.Entry< Integer, Byte > entry : dataStorer.entrySet() ) {
-					recieveBytes[ i ] = entry.getValue();
-					i++;
+//				for ( Map.Entry< Integer, Byte > entry : dataStorer.entrySet() ) {
+//					recieveBytes[ i ] = entry.getValue();
+//					i++;
+//				}
+				
+				for(i=0; i<packet_no; i++){
+					recieveBytes[i] = dataStorer.get(i);
 				}
+				
 			}catch (ArrayIndexOutOfBoundsException e){
 				System.out.println(e.getCause());
 				e.printStackTrace();
