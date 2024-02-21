@@ -23,13 +23,15 @@ public class Client
 			int window_size = iteration*TCPPacket.getTCPPacketSize();
 			
 			//starting 3-way handshaking
+			System.out.println();
+			System.out.println("Client starts the 3-way handshaking by sending 'Hello' ");
 			dos.writeUTF("hello");
 			int packet_no = dis.readInt();
 			
 			System.out.println("packet num : " + packet_no);
 			
 			dos.writeInt(window_size);
-			//int i = 0;
+			System.out.println();
 			
 			//TreeMap automatically sorts the bytes based on seq number
 			TreeMap< Integer, Byte > dataStorer = new TreeMap<>();
@@ -41,18 +43,22 @@ public class Client
 					TCPPacket packetHeader = null;
 					for ( int j = 0; j < iteration; j++ ) {
 						packetHeader = (TCPPacket) ois.readObject();
-						System.out.println("header : " + packetHeader);
+						System.out.println("received packet header : " + packetHeader);
 						Byte data = dis.readByte();
-						System.out.println("data : " + data);
+						//System.out.println("data : " + data);
 						
 						dataStorer.put(packetHeader.getSequenceNumber(), data);
 						
 						System.out.println("seq num : " + packetHeader.getSequenceNumber());
-						System.out.println("ack : " + cumulative_ack);
+						//System.out.println("ack : " + cumulative_ack);
 						
 						if(packetHeader.getSequenceNumber() == cumulative_ack + 1){
 							cumulative_ack = packetHeader.getSequenceNumber() ;
-							System.out.println("ack in: " + cumulative_ack);
+							//System.out.println("ack in: " + cumulative_ack);
+							
+							if(cumulative_ack==7){
+								Thread.sleep(9000);
+							}
 						}
 						
 						if(cumulative_ack == packet_no-1){
@@ -65,6 +71,7 @@ public class Client
 					
 					if ( cumulative_ack == packet_no - 1 ) {
 						
+						System.out.println("sending cumulative ack : " + (cumulative_ack + 1));
 						oos.writeObject(new TCPPacket(s.getPort(), packetHeader.getSourcePort(), 0,
 								cumulative_ack + 1, flag,window_size));
 						
@@ -76,7 +83,8 @@ public class Client
 					
 			
 					//if(cumulative_ack > new Random().nextInt(10)) {
-						System.out.println("sending acknowledgement");
+					System.out.println("sending cumulative ack : " + (cumulative_ack + 1));
+					System.out.println();
 						oos.writeObject(new TCPPacket(s.getPort(), packetHeader.getSourcePort(), 0,
 								cumulative_ack + 1, flag, window_size));
 						

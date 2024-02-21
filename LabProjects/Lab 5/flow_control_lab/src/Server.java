@@ -83,11 +83,11 @@ class ClientHandler extends Thread
 		
 		int window_size = 0;
 		
-		int timeOut = 3000; //3 seconds
+		int timeOut = 3000; //10 milisec
 		
 		//turning the file data into bits
-		//String filepath = System.getProperty("user.dir") + File.separator + "src" + File.separator + "a.txt";
-		File file = new File("C:\\Users\\azmai\\OneDrive\\Desktop\\HandsOnNetworking\\LabProjects\\Lab 5\\flow_control_lab\\src\\a.txt");
+		String filepath = System.getProperty("user.dir") + File.separator + "src" + File.separator + "a.txt";
+		File file = new File(filepath);
 		byte[] fileBytes = null;
 		
 		try {
@@ -100,12 +100,16 @@ class ClientHandler extends Thread
 		while ( true ){
 			try {
 				received = dis.readUTF();
+				System.out.println();
 				System.out.println(received);
 				
 				if(received.equals("hello")){
 					dos.writeInt((int) file.length());
+				
 					System.out.println("total byte num: " + file.length());
 					window_size = dis.readInt();
+					System.out.println("buffer_size  : " + window_size + " bits");
+					System.out.println();
 					break;
 				}
 				
@@ -154,6 +158,7 @@ class ClientHandler extends Thread
 				
 				try{
 					
+					//receive acknowledgement
 					TCPPacket receivedPacket = (TCPPacket) ois.readObject();
 					
 					int ackReceivingTime = (int) System.currentTimeMillis();
@@ -161,16 +166,21 @@ class ClientHandler extends Thread
 					int delay = ackReceivingTime - start_time;
 
 					System.out.println("delay : " + delay + " ms");
+					
+					
+					System.out.println("EWMA timeout: " + timeOut + " ms");
+					
 
 					if(delay > timeOut){
 						throw new SocketTimeoutException();
 					}
 					
 					timeOut = EWMA.getTimeOutInterval(delay);
-					System.out.println("timeout : " + timeOut);
+					
+					
 					
 					ack = (int) receivedPacket.getAcknowledgmentNumber();
-					System.out.println("header: " + receivedPacket);
+					System.out.println("received acknowledgment header: " + receivedPacket);
 					System.out.println("received byte acknowledgement : " + ack);
 					
 					if(ack >= file.length()){
@@ -180,10 +190,10 @@ class ClientHandler extends Thread
 					}
 					
 					i = ack;
-					System.out.println("i = " + i);
+//					System.out.println("i = " + i);
 					
 				}catch (SocketTimeoutException e){
-					System.out.println("did not receive anything for 3 second");
+					System.out.println("did not receive anything during timeOutInterval");
 					continue;
 				} catch (ClassNotFoundException e) {
 					System.out.println(e.getCause());
