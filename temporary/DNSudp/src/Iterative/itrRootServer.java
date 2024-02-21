@@ -1,28 +1,20 @@
-package Iterator;
+package Iterative;
 
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.util.HashMap;
 
-public class itrAuthServer {
-	public static int PORT = 9800;
+public class itrRootServer {
+	public static int PORT = 1500;
 	public static String IPaddress = "localhost";
 	
 	public static HashMap<String, String> dnsRecords = new HashMap<>();
 	
 	public static void main(String[] args) {
-		dnsRecords.put("yahoo.ac.bd", "98.137.246.7");
-		dnsRecords.put("bing.ac.bd", "204.79.197.200");
-		dnsRecords.put("amazon.ac.bd", "176.32.103.205");
-		dnsRecords.put("facebook.ac.bd", "31.13.65.36");
-		dnsRecords.put("twitter.ac.bd", "104.244.42.129");
-		dnsRecords.put("stackoverflow.ac.bd", "151.101.1.69");
-		dnsRecords.put("github.ac.bd", "140.82.121.4");
-		dnsRecords.put("wikipedia.ac.bd", "91.198.174.192");
-		dnsRecords.put("reddit.ac.bd", "151.101.1.140");
-		dnsRecords.put("linkedin.ac.bd", "108.174.10.10");
-		
+		dnsRecords.put("google.ac.bd", "123.345.55.4");
+		dnsRecords.put("example.ac.bd", "192.0.2.1");
+		dnsRecords.put("openai.ac.bd", "203.0.113.5");
 		
 		try {
 			DatagramSocket serverSocket = new DatagramSocket(PORT);
@@ -38,6 +30,7 @@ public class itrAuthServer {
 				int clientPort = receivePacket.getPort();
 				
 				System.out.println("Received DNS request for: " + domainName);
+				System.out.println(clientPort);
 				
 				String ipAddress = handleDNSRequest(serverSocket,domainName);
 				byte[] sendData = ipAddress.getBytes();
@@ -53,6 +46,11 @@ public class itrAuthServer {
 	}
 	
 	private static String handleDNSRequest( DatagramSocket serverSocket, String domainName) {
-		return dnsRecords.getOrDefault(domainName, "not found");
+		if(dnsRecords.containsKey(domainName)){
+			return dnsRecords.get(domainName);
+		}
+		else{
+			return "not found";
+		}
 	}
 }

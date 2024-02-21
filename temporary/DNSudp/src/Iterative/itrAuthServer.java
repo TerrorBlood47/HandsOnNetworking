@@ -1,27 +1,27 @@
-package Iterator;
+package Iterative;
 
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.util.HashMap;
 
-public class itrTLDServer {
-	public static int PORT = 3800;
+public class itrAuthServer {
+	public static int PORT = 9800;
 	public static String IPaddress = "localhost";
 	
 	public static HashMap<String, String> dnsRecords = new HashMap<>();
 	
 	public static void main(String[] args) {
-		dnsRecords.put("apple.ac.bd", "17.253.144.10");
-		dnsRecords.put("microsoft.ac.bd", "40.76.4.15");
-		dnsRecords.put("netflix.ac.bd", "45.57.151.12");
-		dnsRecords.put("instagram.ac.bd", "52.0.76.128");
-		dnsRecords.put("ebay.ac.bd", "66.211.181.161");
-		dnsRecords.put("paypal.ac.bd", "64.4.250.39");
-		dnsRecords.put("spotify.ac.bd", "35.186.224.25");
-		dnsRecords.put("wordpress.ac.bd", "192.0.78.9");
-		dnsRecords.put("bbc.ac.bd", "151.101.64.81");
-		dnsRecords.put("cnn.ac.bd", "151.101.1.67");
+		dnsRecords.put("yahoo.ac.bd", "98.137.246.7");
+		dnsRecords.put("bing.ac.bd", "204.79.197.200");
+		dnsRecords.put("amazon.ac.bd", "176.32.103.205");
+		dnsRecords.put("facebook.ac.bd", "31.13.65.36");
+		dnsRecords.put("twitter.ac.bd", "104.244.42.129");
+		dnsRecords.put("stackoverflow.ac.bd", "151.101.1.69");
+		dnsRecords.put("github.ac.bd", "140.82.121.4");
+		dnsRecords.put("wikipedia.ac.bd", "91.198.174.192");
+		dnsRecords.put("reddit.ac.bd", "151.101.1.140");
+		dnsRecords.put("linkedin.ac.bd", "108.174.10.10");
 		
 		
 		try {

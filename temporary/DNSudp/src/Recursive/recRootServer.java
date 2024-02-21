@@ -1,8 +1,5 @@
 package Recursive;
 
-import Iterator.itrRootServer;
-import Iterator.itrTLDServer;
-
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;

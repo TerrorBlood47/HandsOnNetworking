@@ -1,4 +1,4 @@
-package Iterator;
+package Iterative;
 
 import java.io.IOException;
 import java.net.DatagramPacket;

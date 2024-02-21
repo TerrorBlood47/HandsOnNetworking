@@ -1,11 +1,13 @@
 
 
+import javax.swing.text.html.HTMLDocument;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.util.Scanner;
 
+import java.util.Scanner;
+import Iterative.*;
 public class Client {
 	public static void main(String args[]) throws IOException {
 		Scanner sc = new Scanner(System.in);
@@ -32,7 +34,7 @@ public class Client {
 			
 			// Step 2 : Create the datagramPacket for sending
 			// the data.
-			DatagramPacket DpSend = new DatagramPacket(buf, buf.length, ip, Recursive.recLocalISPServer.PORT);
+			DatagramPacket DpSend = new DatagramPacket(buf, buf.length, ip, itrLocalISPServer.PORT);
 			
 			// Step 3 : invoke the send call to actually send
 			// the data.
