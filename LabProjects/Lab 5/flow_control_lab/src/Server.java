@@ -1,5 +1,3 @@
-
-
 import java.io.*;
 import java.nio.file.Files;
 import java.text.*;
@@ -86,8 +84,13 @@ class ClientHandler extends Thread
 		int timeOut = 3000; //10 milisec
 		
 		//turning the file data into bits
+<<<<<<< HEAD
 		String filepath = System.getProperty("user.dir") + File.separator + "src" + File.separator + "a.txt";
 		File file = new File(filepath);
+=======
+		//String filepath = System.getProperty("user.dir") + File.separator + "src" + File.separator + "a.txt";
+		File file = new File("src/a.txt");
+>>>>>>> f1868c8c95e8ae0b8c6704744f8b3605caa46aad
 		byte[] fileBytes = null;
 		
 		try {
