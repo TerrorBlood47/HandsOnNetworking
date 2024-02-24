@@ -49,16 +49,14 @@ public class ClientHandler extends Thread {
 			
 			if ( request.startsWith("GET") ) {
 				
-				System.out.println("hello\n");
+				//System.out.println("hello\n");
 				String filename = Utility.getStringPortion(request,"GET /", " HTTP/1.0");
-				System.out.println("fn : " + filename);
+				//System.out.println("fn : " + filename);
 				System.out.println(request);
 				
 				//get file path
-				String workingDirectory = System.getProperty("user.dir");
 				
-				String filePath = workingDirectory + File.separator + "HTTP_Server_Client" + File.separator+"src"
-						+File.separator +"ServerStorage"+File.separator + filename;
+				String filePath = httpServer.FILE_PATH+File.separator + filename;
 				
 				try {
 					File file = new File(filePath);
@@ -92,7 +90,7 @@ public class ClientHandler extends Thread {
 						// Send the file to Server Socket
 						dos.write(buffer, 0, bytes);
 						dos.flush();
-						System.out.println(buffer);
+						//System.out.println(buffer);
 					}
 					
 					fileInputStream.close();

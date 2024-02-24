@@ -6,7 +6,7 @@ import java.util.Scanner;
 public class httpClient {
 	
 	private static String 
-	FILE_PATH = "./HTTP_Server_Client/src/multipleClientsStorage";
+	FILE_PATH = System.getProperty("user.dir") + File.separator + "src" + File.separator+"multipleClientsStorage";
 	
 	public static DataInputStream dis = null;
 	public static DataOutputStream dos = null;
@@ -25,7 +25,6 @@ public class httpClient {
 			System.out.println(serverAsking);
 			
 			System.out.println();
-			System.out.println();
 
 			System.out.println("choose ? [get | post]");
 			String tosendReq = scn.nextLine();
@@ -38,6 +37,9 @@ public class httpClient {
 					socket.close();
 					scn.close();
 					return;
+				}
+				else{
+					System.out.println("Choose the file to get : ");
 				}
 				
 				//send to server the filename to download
@@ -62,17 +64,7 @@ public class httpClient {
 				
 				//receive contents of the file
 				
-				String workingDirectory = System.getProperty("user.dir");
-				System.out.println(workingDirectory);
-				
-				String saveFilePath = workingDirectory
-						+File.separator
-						+"HTTP_Server_Client"
-						+File.separator
-						+"src"
-						+File.separator
-						+"multipleClientsStorage"
-						+File.separator
+				String saveFilePath = FILE_PATH +File.separator
 						+"Received_"+ System.currentTimeMillis()+ "_" +chosenFileName;
 				
 				int bytes = 0;
@@ -132,9 +124,8 @@ public class httpClient {
 				//take input from client
 				String chosenFileName = scn.nextLine();
 				
-				String workingDirectory = System.getProperty("user.dir");
-				String filePath = workingDirectory + File.separator + "HTTP_Server_Client" + File.separator + "src" + File.separator + "multipleClientsStorage"
-						+ File.separator + chosenFileName;
+				
+				String filePath = FILE_PATH  + File.separator + chosenFileName;
 				
 				try{
 					File file = new File(filePath);
@@ -160,7 +151,7 @@ public class httpClient {
 							// Send the file to Server Socket
 							dos.write(buffer, 0, bytes);
 							dos.flush();
-							System.out.println(buffer);
+							//System.out.println(buffer);
 						}
 						
 						fileInputStream.close();

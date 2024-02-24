@@ -81,16 +81,13 @@ class ClientHandler extends Thread
 		
 		int window_size = 0;
 		
-		int timeOut = 3000; //10 milisec
+		int timeOut = 1000; //1 second
 		
 		//turning the file data into bits
-<<<<<<< HEAD
+
 		String filepath = System.getProperty("user.dir") + File.separator + "src" + File.separator + "a.txt";
 		File file = new File(filepath);
-=======
-		//String filepath = System.getProperty("user.dir") + File.separator + "src" + File.separator + "a.txt";
-		File file = new File("src/a.txt");
->>>>>>> f1868c8c95e8ae0b8c6704744f8b3605caa46aad
+
 		byte[] fileBytes = null;
 		
 		try {

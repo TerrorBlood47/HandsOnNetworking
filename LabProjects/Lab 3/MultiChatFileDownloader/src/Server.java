@@ -1,5 +1,6 @@
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -7,8 +8,9 @@ import java.net.Socket;
 
 public class Server {
 	
-	public static final int PORT = 7500;
-	public static final String FILE_PATH ="./MultiChatFileDownloader/src/serverstorage" ;
+	public static final int PORT = 6969;
+	public static final String FILE_PATH =System.getProperty("user.dir") + File.separator + "src" + File.separator
+			+ "serverstorage";
 	
 	public static void main( String[] args ) throws IOException {
 		

@@ -91,8 +91,6 @@ public class Client {
 			
 			String saveFilePath = workingDirectory
 									+File.separator
-									+"MultiChatFileDownloader"
-									+File.separator
 									+"src"
 									+File.separator
 									+"clientstorage"
