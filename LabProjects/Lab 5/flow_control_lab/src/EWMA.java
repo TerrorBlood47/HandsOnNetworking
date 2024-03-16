@@ -12,7 +12,7 @@ public class EWMA {
 	public static int getTimeOutInterval(float SampleRTT){
 		EstimatedRTT = (1-Alpha)*EstimatedRTT + Alpha*SampleRTT;
 		
-		DevRTT = (1 - Beta)*DevRTT + Beta*SampleRTT;
+		DevRTT = (1 - Beta)*DevRTT + Beta*Math.abs(EstimatedRTT - SampleRTT);
 		
 		Integer timeOutInterval = (int) (EstimatedRTT + 4*DevRTT);
 		
