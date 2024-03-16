@@ -4,8 +4,10 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.nio.file.Files;
+import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Queue;
+import java.util.TreeMap;
 
 // ClientHandler class
 public class ClientHandler extends Thread {
@@ -47,6 +49,7 @@ public class ClientHandler extends Thread {
 	@Override
 	public void run() {
 		
+		TreeMap<Long,Long> cwndVsTime = new TreeMap<>();
 		
 		String received;
 		
@@ -103,6 +106,7 @@ public class ClientHandler extends Thread {
 		Pair< Integer, Integer > lastPacketNotFoundAck = new Pair<>(0, 0);
 		
 		
+		long ultra_init_time = System.nanoTime();
 		
 		while ( true ) {
 			
@@ -111,6 +115,10 @@ public class ClientHandler extends Thread {
 			
 			this.window_size = Math.min(this.window_size, fileBytes.length - i);
 			
+			
+			long ultra_fin_time = System.nanoTime();
+			
+			cwndVsTime.put((ultra_fin_time-ultra_init_time)/1000000, (long) cwnd);
 			
 			try {
 				
@@ -325,6 +333,27 @@ public class ClientHandler extends Thread {
 			}
 		}
 		
+		
+		long maxtime = Integer.MIN_VALUE;
+		
+		try {
+			FileOutputStream fos = new FileOutputStream("graph.txt");
+			
+			for( Map.Entry<Long,Long> entry: cwndVsTime.entrySet()){
+				System.out.println("time = " + entry.getKey() + " ms, cwnd = " + entry.getValue() );
+				String line = entry.getKey() + " " + entry.getValue() + "\n";
+				fos.write(line.getBytes());
+				maxtime = Long.max(maxtime,entry.getValue());
+			}
+		} catch (FileNotFoundException e) {
+			System.out.println(e.getCause());
+			e.printStackTrace();
+		} catch (IOException e) {
+			System.out.println(e.getCause());
+			e.printStackTrace();
+		}
+		
+		System.out.println("throughput = " + (fileBytes.length)/maxtime + " bytes/ms");
 		
 	}
 }

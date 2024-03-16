@@ -6,8 +6,6 @@ import java.util.TreeMap;
 // Client class 
 public class Client {
 	
-	
-	
 	public static void main( String[] args ) throws IOException {
 		try {
 			Scanner scn = new Scanner(System.in);
@@ -63,9 +61,9 @@ public class Client {
 							cumulative_ack = packet.getSequenceNumber();
 							//System.out.println("ack in: " + cumulative_ack);
 
-//							if(cumulative_ack==27){
-//								Thread.sleep(3000);
-//							}
+							if(cumulative_ack==27){
+								Thread.sleep(3000);
+							}
 						}
 						
 						if ( cumulative_ack == packet_no - 1 ) {
