@@ -1,16 +1,29 @@
 import java.io.*;
-import java.util.TreeMap;
+import java.util.ArrayList;
+import java.util.List;
 
-public class LinkStatePacket {
+
+public class LinkStatePacket implements Serializable{
 	String sender,receiver;
-	TreeMap<String,Integer> neighbourList;
+	List<Edge> EdgeList;
 	
-	public LinkStatePacket( String sender, String receiver, TreeMap< String, Integer > neighbourList ) {
+	public LinkStatePacket( String sender, String receiver, ArrayList<Edge> EdgeList ) {
 		this.sender = sender;
 		this.receiver = receiver;
-		this.neighbourList = neighbourList;
+		this.EdgeList = EdgeList;
 	}
 	
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("Sender: ").append(sender).append("\n");
+		sb.append("Receiver: ").append(receiver).append("\n");
+		sb.append("Edges:\n");
+		for (Edge edge : EdgeList) {
+			sb.append(edge).append("\n");
+		}
+		return sb.toString();
+	}
 	
 	// Serialize the object into a byte array
 	public static byte[] serializeObject(Object obj) {

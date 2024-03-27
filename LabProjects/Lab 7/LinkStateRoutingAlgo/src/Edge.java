@@ -1,4 +1,6 @@
-public class Edge {
+import java.io.Serializable;
+
+public class Edge implements Serializable {
 	public String start,end;
 	public int weight;
 	
@@ -6,5 +8,10 @@ public class Edge {
 		this.start = start;
 		this.end = end;
 		this.weight = weight;
+	}
+	
+	@Override
+	public String toString() {
+		return "[" + start + " -> " + end + ", weight: " + weight + "]";
 	}
 }

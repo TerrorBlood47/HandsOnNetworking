@@ -7,19 +7,19 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.TreeMap;
 
-public class NodeRouter_A {
+public class NodeRouter_B {
 	
 	private static TreeMap< String, Integer > nodeIdentifier = new TreeMap<>();
 	
 	static {
-		nodeIdentifier.put("A", 0);
-		nodeIdentifier.put("B", 1);
+		nodeIdentifier.put("A", 1);
+		nodeIdentifier.put("B", 0);
 		nodeIdentifier.put("C", 2);
 		nodeIdentifier.put("D", 3);
 	}
 	
-	public static String ROUTER_NAME = "A";
-	public static int PORT = 1300;
+	public static String ROUTER_NAME = "B";
+	public static int PORT = 2300;
 	
 	public static String IP = "localhost";
 	
@@ -29,8 +29,7 @@ public class NodeRouter_A {
 	private static int parent[] = new int[ 4 ];
 	
 	static {
-		neighboursList.put("B", 20);
-		neighboursList.put("D", 10);
+		neighboursList.put("A", 20);
 		
 		for ( int i = 0; i < Graph.length; i++ ) {
 			for ( int j = 0; j < Graph[ i ].length; j++ ) {
@@ -38,7 +37,7 @@ public class NodeRouter_A {
 			}
 		}
 		
-		int u = 0; //for A
+		int u = 0; //for B
 		
 		for ( Map.Entry< String, Integer > entry : neighboursList.entrySet() ) {
 			int v = nodeIdentifier.get(entry.getKey());
@@ -62,65 +61,116 @@ public class NodeRouter_A {
 			DatagramSocket routing_server = new DatagramSocket(PORT);
 			System.out.println("[ESTABLISHED] Router" + ROUTER_NAME + " Established");
 			
-		
+			
+			
+			//update/send thread
+			new Thread() {
 				
-				//update/send thread
-				new Thread() {
+				static {
+					System.out.println("[UPDATING THREAD ACTIVATED]");
+				}
+				
+				public void run() {
 					
-					static {
-						System.out.println("[UPDATING THREAD ACTIVATED]");
-					}
-					
-					public void run() {
+					while ( true ) {
 						
-						while ( true ) {
+						synchronized (this) {
 							
-							synchronized (this) {
+							String input = sc.nextLine();
+							
+							System.out.println(input);
+							
+							String words[] = input.split(" ");
+							
+							if ( words[ 0 ].equals("printpath") ) {
+								printPath(words[ 1 ]);
+							} else if ( words[ 0 ].equals("updateEdge") ) {
+								String src = words[ 1 ];
+								String dest = words[ 2 ];
+								Integer cost = Integer.parseInt(words[ 3 ]);
 								
-								String input = sc.nextLine();
-								
-								System.out.println(input);
-								
-								String words[] = input.split(" ");
-								
-								if ( words[ 0 ].equals("printpath") ) {
-									printPath(words[ 1 ]);
-								} else if ( words[ 0 ].equals("updateEdge") ) {
-									String src = words[ 1 ];
-									String dest = words[ 2 ];
-									Integer cost = Integer.parseInt(words[ 3 ]);
+								if(ROUTER_NAME.equals(src) && neighboursList.get(dest)!=cost) {
+									neighboursList.put(dest, cost);
 									
-									if(ROUTER_NAME.equals(src) && neighboursList.get(dest)!=cost) {
-										neighboursList.put(dest, cost);
-										
-										int u = nodeIdentifier.get(src);
-										int v = nodeIdentifier.get(dest);
-										
-										Graph[ u ][ v ] = cost;
-										Graph[ v ][ u ] = cost;
-										
-										ArrayList< Edge > new_edge_list = getNewEdgeList();
-										
-										try {
-											sendToAllNeighbours(routing_server, new_edge_list);
-										} catch (IOException e) {
-											e.printStackTrace();
-											System.out.println(e.getCause());
-										}
-										
-										printPath("A");
-										printPath("B");
-										printPath("C");
-										printPath("D");
+									int u = nodeIdentifier.get(src);
+									int v = nodeIdentifier.get(dest);
+									
+									Graph[ u ][ v ] = cost;
+									Graph[ v ][ u ] = cost;
+									
+									ArrayList< Edge > new_edge_list = getNewEdgeList();
+									
+									try {
+										sendToAllNeighbours(routing_server, new_edge_list);
+									} catch (IOException e) {
+										e.printStackTrace();
+										System.out.println(e.getCause());
 									}
+								}
+								
+								printPath("A");
+								printPath("B");
+								printPath("C");
+								printPath("D");
+								
+							} else if ( words[ 0 ].equals("send") || words[ 0 ].equals("start") ) {
+								
+								ArrayList< Edge > new_edge_list = getNewEdgeList();
+								
+								try {
+									sendToAllNeighbours(routing_server, new_edge_list);
+								} catch (IOException e) {
+									e.printStackTrace();
+									System.out.println(e.getCause());
+								}
+								
+								printPath("A");
+								printPath("B");
+								printPath("C");
+								printPath("D");
+							}
+						}
+					}
+				}
+				
+			}.start();
+			
+			//listening thread
+			new Thread() {
+				
+				static {
+					System.out.println("[LISTENING THREAD ACTIVATED]");
+				}
+				
+				public void run() {
+					
+					while(true) {
+						
+						synchronized (this) {
+							
+							byte[] receiveData = new byte[ 4 * 1024 ];
+							DatagramPacket datagramPacket = new DatagramPacket(receiveData, receiveData.length);
+							try {
+								
+								routing_server.receive(datagramPacket);
+								System.out.println("[RECEIVED PACKET]");
+								
+								LinkStatePacket packet = (LinkStatePacket) LinkStatePacket.deserializeObject(datagramPacket.getData());
+								
+								System.out.println(packet);
+								
+								boolean graphUPDATED = updateGraph(packet);
+								
+								boolean networkChanged = false;
+								
+								if ( graphUPDATED ) {
+									networkChanged = calculateDijkstra();
+								}
+								
+								if(networkChanged){
+									networkChanged = false;
 									
-								} else if ( words[ 0 ].equals("send") || words[ 0 ].equals("start") ) {
-									
-									ArrayList< Edge > new_edge_list = new ArrayList<>();
-									
-									for ( Map.Entry< String, Integer > entry : neighboursList.entrySet() ) {
-										new_edge_list.add(new Edge(ROUTER_NAME, entry.getKey(), entry.getValue()));
-									}
+									ArrayList< Edge > new_edge_list = getNewEdgeList();
 									
 									try {
 										sendToAllNeighbours(routing_server, new_edge_list);
@@ -129,80 +179,23 @@ public class NodeRouter_A {
 										System.out.println(e.getCause());
 									}
 									
-									printPath("A");
-									printPath("B");
-									printPath("C");
-									printPath("D");
 								}
-							}
-						}
-					}
-					
-				}.start();
-				
-				//listening thread
-				new Thread() {
-					
-					static {
-						System.out.println("[LISTENING THREAD ACTIVATED]");
-					}
-					
-					public void run() {
-						
-						while(true) {
-							
-							synchronized (this) {
 								
-								byte[] receiveData = new byte[ 4 * 1024 ];
-								DatagramPacket datagramPacket = new DatagramPacket(receiveData, receiveData.length);
-								try {
-									
-									routing_server.receive(datagramPacket);
-									System.out.println("[RECEIVED PACKET]");
-									
-									LinkStatePacket packet = (LinkStatePacket) LinkStatePacket.deserializeObject(datagramPacket.getData());
-									
-									System.out.println(packet);
-									
-									boolean graphUPDATED = updateGraph(packet);
-									
-									boolean networkChanged = false;
-									
-									if ( graphUPDATED ) {
-										networkChanged = calculateDijkstra();
-									}
-									
-									if(networkChanged){
-										networkChanged = false;
-										
-										System.out.println("<<<<<<<<< network changed >>>>>>>>>>>");
-										
-										ArrayList< Edge > new_edge_list = getNewEdgeList();
-										
-										try {
-											sendToAllNeighbours(routing_server, new_edge_list);
-										} catch (IOException e) {
-											e.printStackTrace();
-											System.out.println(e.getCause());
-										}
-										
-									}
-									
-									printPath("A");
-									printPath("B");
-									printPath("C");
-									printPath("D");
-									
-									
-								} catch (IOException e) {
-									e.printStackTrace();
-									System.out.println(e.getCause());
-								}
+								printPath("A");
+								printPath("B");
+								printPath("C");
+								printPath("D");
+								
+								
+							} catch (IOException e) {
+								e.printStackTrace();
+								System.out.println(e.getCause());
 							}
 						}
 					}
-				}.start();
-				
+				}
+			}.start();
+			
 			
 			
 		} catch (IOException e) {
@@ -210,6 +203,7 @@ public class NodeRouter_A {
 			System.out.println(e.getCause());
 		}
 	}
+	
 	
 	private static synchronized ArrayList<Edge> getNewEdgeList() {
 		
@@ -329,7 +323,7 @@ public class NodeRouter_A {
 		return minIndex;
 	}
 	
-	private static  synchronized Boolean updateGraph( LinkStatePacket packet ) {
+	private static synchronized Boolean updateGraph( LinkStatePacket packet ) {
 		boolean graphUpdated = false;
 		
 		String sender = packet.sender;
