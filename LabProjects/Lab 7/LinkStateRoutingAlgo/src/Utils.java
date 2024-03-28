@@ -19,6 +19,13 @@ public class Utils {
 			
 			return NodeRouter_D.PORT;
 		}
+		else if(ROUTER_NAME.equals("E")){
+
+			return NodeRouter_E.PORT;
+		}else if(ROUTER_NAME.equals("F")){
+
+			return NodeRouter_F.PORT;
+		}
 		else {
 			System.out.println("No Router for this PORT");
 			return Integer.MAX_VALUE;
